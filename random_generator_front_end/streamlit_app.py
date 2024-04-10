@@ -6,7 +6,7 @@ from config import settings
 from httpx import Client
 
 
-def fetch_from_backend(client: Client, selected_source: str):
+def fetch_from_backend(client: Client, selected_source: str) -> None:
     """Fetches number from backend from specified source.
     Requires for response to be in format {"number": ...}.
     Shows it in streamlit
@@ -40,7 +40,7 @@ def get_sources(client: Client) -> Union[List[str], None]:
         None: if error is found, None is returned
         list[str]: list of sources
     """
-    sources_json: dict = ujson.loads(client.get("/api/random").text)
+    sources_json = ujson.loads(client.get("/api/random").text)
     if not isinstance(sources_json, dict):
         return None
     if "sources" not in sources_json.keys():
@@ -48,7 +48,7 @@ def get_sources(client: Client) -> Union[List[str], None]:
     return list(sources_json["sources"])
 
 
-def random_generator(client: Client):
+def random_generator(client: Client) -> None:
     """Streamlit app.
 
     Args:
@@ -60,7 +60,7 @@ def random_generator(client: Client):
     sources = get_sources(client)
 
     if sources is not None:
-        source = st.selectbox("Select source to generate a random number", sources)
+        source: str = st.selectbox("Select source to generate a random number", sources)
 
         st.button(
             "Generate a random number",
@@ -72,5 +72,5 @@ def random_generator(client: Client):
 
 if __name__ == "__main__":
     st.title("Random Generator")
-    http_client = Client(base_url=settings.BACKEND_URL, timeout=3)
+    http_client: Client = Client(base_url=settings.BACKEND_URL, timeout=3)
     random_generator(http_client)
