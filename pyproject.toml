@@ -25,6 +25,7 @@ aiofiles = "^23.1.0"
 httptools = "^0.6.0"
 loguru = "^0.7.0"
 streamlit = "^1.33.0"
+requests = "^2.31.0"
 
 
 [tool.poetry.dev-dependencies]
