@@ -6,7 +6,7 @@ class Settings(BaseSettings):
         env_file=".env", env_ignore_empty=True, extra="ignore"
     )
 
-    BACKEND_URL: str = "http://localhost:8000"
+    backend_url: str = "http://localhost:8000"
 
 
 settings = Settings()
