@@ -20,10 +20,10 @@ def fetch_from_backend(client: Client, selected_source: str) -> None:
     result = client.get(f"/api/random/{selected_source}")
     if result.status_code == 200:
         result_json: dict = ujson.loads(result.text)
-        if not isinstance(result_json, dict) or "number" not in result_json.keys():
+        if not isinstance(result_json, dict) or "random_number" not in result_json.keys():
             st.write("Error: Invalid JSON from the server")
         else:
-            st.write(result_json["number"])
+            st.write(result_json["random_number"])
     else:
         st.write(f"Error: status code {result.status_code}")
 
@@ -71,5 +71,5 @@ def random_generator(client: Client) -> None:
 
 if __name__ == "__main__":
     st.title("Random Generator")
-    http_client: Client = Client(base_url=settings.BACKEND_URL, timeout=3)
+    http_client: Client = Client(base_url=settings.backend_url, timeout=3)
     random_generator(http_client)
