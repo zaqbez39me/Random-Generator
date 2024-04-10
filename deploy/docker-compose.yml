@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+      target: prod
+    image: random_generator:${RANDOM_GENERATOR_VERSION:-latest}
+    restart: always
+    env_file:
+    - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      RANDOM_GENERATOR_HOST: 0.0.0.0
+      RANDOM_GENERATOR_DB_FILE: /db_data/db.sqlite3
+      RANDOM_GENERATOR_REDIS_HOST: random_generator-redis
+    volumes:
+    - random_generator-db-data:/db_data/
+
+  redis:
+    image: bitnami/redis:6.2.5
+    hostname: "random_generator-redis"
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 50
+
+
+
+volumes:
+  random_generator-db-data:
+    name: random_generator-db-data
