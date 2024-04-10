@@ -24,6 +24,7 @@ redis = {version = "^4.6.0", extras = ["hiredis"]}
 aiofiles = "^23.1.0"
 httptools = "^0.6.0"
 loguru = "^0.7.0"
+streamlit = "^1.33.0"
 
 
 [tool.poetry.dev-dependencies]
