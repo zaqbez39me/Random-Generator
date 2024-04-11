@@ -20,7 +20,12 @@ def fetch_from_backend(client: Client, selected_source: str) -> None:
     result = client.get(f"/api/random/{selected_source}")
     if result.status_code == 200:
         result_json: dict = ujson.loads(result.text)
-        if not isinstance(result_json, dict) or "random_number" not in result_json.keys():
+
+        if (
+            not isinstance(result_json, dict)
+            or "random_number" not in result_json.keys()
+        ):
+            print(result_json)
             st.write("Error: Invalid JSON from the server")
         else:
             st.write(result_json["random_number"])
@@ -39,7 +44,7 @@ def get_sources(client: Client) -> Union[List[str], None]:
         None: if error is found, None is returned
         list[str]: list of sources
     """
-    sources_json = ujson.loads(client.get("/api/random").text)
+    sources_json = ujson.loads(client.get("/api/random/sources").text)
     if not isinstance(sources_json, dict):
         return None
     if "sources" not in sources_json.keys():
