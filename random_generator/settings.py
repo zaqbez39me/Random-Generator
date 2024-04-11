@@ -50,6 +50,14 @@ class Settings(BaseSettings):
     redis_pass: Optional[str] = None
     redis_base: Optional[int] = None
 
+    # Variables for seed fetchers
+    news_api_key: str
+    news_query: str = "tesla"
+    weather_latitude: float = 55.752116
+    weather_longitude: float = 48.744554
+    requests_timeout: float = 3.0
+    time_zone: str = "Europe/Amsterdam"
+
     @property
     def db_url(self) -> URL:
         """
@@ -85,6 +93,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_prefix="RANDOM_GENERATOR_",
         env_file_encoding="utf-8",
+        extra="ignore",
     )
 
 
