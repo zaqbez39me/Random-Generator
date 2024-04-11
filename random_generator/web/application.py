@@ -5,9 +5,10 @@ from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from random_generator._logging import configure_logging
 from random_generator.web.api.router import api_router
-
 
 APP_ROOT = Path(__file__).parent.parent
 
@@ -39,5 +40,7 @@ def get_app() -> FastAPI:
         StaticFiles(directory=APP_ROOT / "static"),
         name="static",
     )
+
+    Instrumentator().instrument(app).expose(app)
 
     return app

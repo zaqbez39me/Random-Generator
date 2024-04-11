@@ -10,8 +10,6 @@ services:
       dockerfile: ./random_generator/Dockerfile
     env_file:
       - ".env"
-    ports:
-      - 5000
     networks:
       - monitoring
 
@@ -25,5 +23,17 @@ services:
       - 8000:8000
     expose:
       - 8000
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    expose:
+      - 9090
+    ports:
+      - "9090:9090"
+    command: --config.file=/etc/prometheus/prometheus.yml
     networks:
       - monitoring
