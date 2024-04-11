@@ -93,6 +93,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_prefix="RANDOM_GENERATOR_",
         env_file_encoding="utf-8",
+        extra="ignore",
     )
 
 
