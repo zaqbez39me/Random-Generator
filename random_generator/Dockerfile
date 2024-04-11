@@ -22,11 +22,11 @@ COPY pyproject.toml pyproject.toml
 # Install requirements
 RUN poetry install
 
-COPY random_generator/ .
+COPY random_generator/ random_generator/
 
 # Change to read-only
 RUN chmod -R 555 /app_data
 
 USER myuser
 
-ENTRYPOINT ["poetry", "run", "python", "-m", "."]
+ENTRYPOINT ["poetry", "run", "python", "-m", "random_generator"]

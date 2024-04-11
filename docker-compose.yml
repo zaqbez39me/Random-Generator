@@ -1,5 +1,8 @@
 version: "1.0"
 
+networks:
+  monitoring:
+
 services:
   backend:
     build:
@@ -9,14 +12,18 @@ services:
       - ".env"
     ports:
       - 5000
+    networks:
+      - monitoring
 
   frontend:
     build:
       context: .
       dockerfile: ./random_generator_front_end/Dockerfile
     environment:
-      RANDOM_GENERATOR_FRONTEND_BACKEND_URL: "http://backend:5000"
+      RANDOM_GENERATOR_FRONTEND_BACKEND_URL: "http://backend:8000"
     ports:
       - 8000:8000
     expose:
       - 8000
+    networks:
+      - monitoring

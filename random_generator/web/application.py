@@ -5,12 +5,9 @@ from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from random_generator.logging import configure_logging
+from random_generator._logging import configure_logging
 from random_generator.web.api.router import api_router
-from random_generator.web.lifetime import (
-    register_shutdown_event,
-    register_startup_event,
-)
+
 
 APP_ROOT = Path(__file__).parent.parent
 
@@ -26,16 +23,12 @@ def get_app() -> FastAPI:
     configure_logging()
     app = FastAPI(
         title="random_generator",
-        version=metadata.version("random_generator"),
+        # version=metadata.version("random_generator"),
         docs_url=None,
         redoc_url=None,
         openapi_url="/api/openapi.json",
         default_response_class=UJSONResponse,
     )
-
-    # Adds startup and shutdown events.
-    register_startup_event(app)
-    register_shutdown_event(app)
 
     # Main router for the API.
     app.include_router(router=api_router, prefix="/api")
