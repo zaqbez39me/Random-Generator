@@ -20,6 +20,7 @@ def fetch_from_backend(client: Client, selected_source: str) -> None:
     result = client.get(f"/api/random/{selected_source}")
     if result.status_code == 200:
         result_json: dict = ujson.loads(result.text)
+
         if (
             not isinstance(result_json, dict)
             or "random_number" not in result_json.keys()
