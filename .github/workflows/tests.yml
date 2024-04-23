@@ -61,3 +61,19 @@ jobs:
       run: poetry run pytest -vv --cov="random_generator" .
       env:
         RANDOM_GENERATOR_HOST: "0.0.0.0"
+  locust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11.0'
+      - name: Install deps
+        uses: knowsuchagency/poetry-install@v1
+        env:
+          POETRY_VIRTUALENVS_CREATE: false
+      - name: Run server
+        run: poetry run uvicorn random_generator.web.application:get_app
+      - name: Run locust
+        run: poetry run locust -f random_generator/tests/performance/locustfile.py --headless --users 10 --spawn-rate 1 -H http://127.0.0.1:8000
