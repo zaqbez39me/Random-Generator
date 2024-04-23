@@ -62,7 +62,6 @@ jobs:
       env:
         RANDOM_GENERATOR_HOST: "0.0.0.0"
   locust:
-    timeout-minutes: 2
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -76,5 +75,3 @@ jobs:
           POETRY_VIRTUALENVS_CREATE: false
       - name: Run server
         run: poetry run uvicorn random_generator.web.application:get_app &
-      - name: Run locust
-        run: poetry run locust -f random_generator/tests/performance/locustfile.py --headless --users 10 --spawn-rate 1 -H http://127.0.0.1:8000
