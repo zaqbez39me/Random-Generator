@@ -15,6 +15,8 @@ jobs:
       uses: knowsuchagency/poetry-install@v1
       env:
         POETRY_VIRTUALENVS_CREATE: false
+    - name: Run black check
+      run: poetry run black --check .
   flake8:
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +30,7 @@ jobs:
       env:
         POETRY_VIRTUALENVS_CREATE: false
     - name: Run flake8 check
-      run: poetry run flake8 --extend-ignore WPS437,DAR301,E501,WPS436,WPS318,WPS319,S311,WPS112,WPS338,WPS420,WPS463,WPS458 --count --max-complexity 10 random_generator
+      run: poetry run flake8 --extend-ignore I001,I005,WPS437,DAR301,E501,WPS436,WPS318,WPS319,S311,WPS112,WPS338,WPS420,WPS463,WPS458 --count --max-complexity 10 random_generator
   mypy:
     runs-on: ubuntu-latest
     steps:
