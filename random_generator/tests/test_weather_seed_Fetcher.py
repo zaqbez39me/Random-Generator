@@ -7,15 +7,11 @@ from random_generator.web.api.random.seed_fetchers import WeatherSeedFetcher
 def mock_response() -> MagicMock:
     mock_resp = MagicMock()
     mock_resp.status_code = 200
-    mock_resp.json.return_value = {
-        "current": {
-            "temperature_2m": 25.0
-        }
-    }
+    mock_resp.json.return_value = {"current": {"temperature_2m": 25.0}}
     return mock_resp
 
 
-@patch('requests.get')
+@patch("requests.get")
 def test_fetch_data(mock_get: MagicMock, mock_response: MagicMock) -> None:
     mock_get.return_value = mock_response
     data = WeatherSeedFetcher._WeatherSeedFetcher__fetch_data()  # type: ignore[attr-defined]
@@ -33,13 +29,13 @@ def test_encode_data() -> None:
 
 
 @patch(
-    'random_generator.web.api.random.seed_fetchers.WeatherSeedFetcher._WeatherSeedFetcher__fetch_data')
+    "random_generator.web.api.random.seed_fetchers.WeatherSeedFetcher._WeatherSeedFetcher__fetch_data"
+)
 @patch(
-    'random_generator.web.api.random.seed_fetchers.WeatherSeedFetcher._WeatherSeedFetcher__encode_data')
+    "random_generator.web.api.random.seed_fetchers.WeatherSeedFetcher._WeatherSeedFetcher__encode_data"
+)
 def test_get_seed(mock_encode_data: MagicMock, mock_fetch_data: MagicMock) -> None:
-    mock_fetch_data.return_value = MagicMock(
-        current=MagicMock(temperature=25.0)
-    )
+    mock_fetch_data.return_value = MagicMock(current=MagicMock(temperature=25.0))
     mock_encode_data.return_value = 321394091
     seed = WeatherSeedFetcher.get_seed()
     assert seed == 321394091
