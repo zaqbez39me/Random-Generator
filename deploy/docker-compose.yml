@@ -9,7 +9,7 @@ services:
     image: random_generator:${RANDOM_GENERATOR_VERSION:-latest}
     restart: always
     env_file:
-    - .env
+    - ../random_generator/tests/.env
     depends_on:
       redis:
         condition: service_healthy

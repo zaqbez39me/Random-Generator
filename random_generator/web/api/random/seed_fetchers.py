@@ -106,6 +106,7 @@ class NewsSeedFetcher(SeedFetcher):
         return int(
             hash(data.articles[0].title) if data.articles else int(random.random()),
         ) % (2**16)
+    ##
 
     @classmethod
     def get_seed(cls) -> int:

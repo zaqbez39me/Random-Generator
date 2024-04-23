@@ -111,7 +111,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+random_generator/tests/.env
 .venv
 env/
 venv/
