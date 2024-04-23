@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
 
     # Variables for seed fetchers
-    news_api_key: str = "d66cfea1da25452cbeed425c9fa16dc9"
+    news_api_key: str
     news_query: str = "tesla"
     weather_latitude: float = 55.752116
     weather_longitude: float = 48.744554
@@ -49,7 +49,7 @@ class Settings(BaseSettings):
     time_zone: str = "Europe/Amsterdam"
 
     model_config = SettingsConfigDict(
-        env_file="../.env",
+        env_file=".env",
         env_prefix="RANDOM_GENERATOR_",
         env_file_encoding="utf-8",
         extra="ignore",

@@ -27,6 +27,7 @@ loguru = "^0.7.0"
 streamlit = "^1.33.0"
 requests = "^2.31.0"
 prometheus-fastapi-instrumentator = "^7.0.0"
+locust = "^2.26.0"
 
 
 [tool.poetry.dev-dependencies]
