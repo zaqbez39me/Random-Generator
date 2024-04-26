@@ -1,4 +1,4 @@
-version: "1.0"
+version: "3"
 
 networks:
   monitoring:
@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: ./random_generator/Dockerfile
     env_file:
-      - ".env"
+      - "random_generator/tests/.env"
     networks:
       - monitoring
 

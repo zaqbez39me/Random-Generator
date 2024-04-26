@@ -27,6 +27,7 @@ loguru = "^0.7.0"
 streamlit = "^1.33.0"
 requests = "^2.31.0"
 prometheus-fastapi-instrumentator = "^7.0.0"
+locust = "^2.26.0"
 
 
 [tool.poetry.dev-dependencies]
@@ -45,10 +46,6 @@ fakeredis = "^2.5.0"
 httpx = "^0.23.3"
 importlib-metadata = "4.8.3"
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-src_paths = ["random_generator",]
 
 [tool.mypy]
 strict = true

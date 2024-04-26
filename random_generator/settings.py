@@ -1,10 +1,8 @@
 import enum
 from pathlib import Path
 from tempfile import gettempdir
-from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from yarl import URL
 
 TEMP_DIR = Path(gettempdir())
 
@@ -41,7 +39,7 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
 
     # Variables for seed fetchers
-    news_api_key: str
+    news_api_key: str = "d66cfea1da25452cbeed425c9fa16dc9"
     news_query: str = "tesla"
     weather_latitude: float = 55.752116
     weather_longitude: float = 48.744554

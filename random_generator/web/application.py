@@ -1,10 +1,8 @@
-from importlib import metadata
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
 from fastapi.staticfiles import StaticFiles
-
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from random_generator._logging import configure_logging
@@ -24,7 +22,6 @@ def get_app() -> FastAPI:
     configure_logging()
     app = FastAPI(
         title="random_generator",
-        # version=metadata.version("random_generator"),
         docs_url=None,
         redoc_url=None,
         openapi_url="/api/openapi.json",

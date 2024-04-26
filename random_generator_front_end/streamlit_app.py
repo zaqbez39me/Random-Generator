@@ -1,7 +1,7 @@
 from typing import List, Union
 
 import streamlit as st
-import ujson
+import ujson  # type: ignore[import-untyped]
 from config import settings
 from httpx import Client
 
@@ -17,9 +17,11 @@ def fetch_from_backend(client: Client, selected_source: str) -> None:
     Returns:
         None
     """
+
     result = client.get(f"/api/random/{selected_source}")
-    if result.status_code == 200:
-        result_json: dict = ujson.loads(result.text)
+    ok = 200
+    if result.status_code == ok:
+        result_json: dict[str, str] = ujson.loads(result.text)
 
         if (
             not isinstance(result_json, dict)
@@ -64,7 +66,7 @@ def random_generator(client: Client) -> None:
     sources = get_sources(client)
 
     if sources is not None:
-        source: str = st.selectbox("Select source to generate a random number", sources)
+        source: str = st.selectbox("Select source to generate a random number", sources)  # type: ignore[assignment]
 
         st.button(
             "Generate a random number",
