@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
 
     # Variables for seed fetchers
-    news_api_key: str = "d66cfea1da25452cbeed425c9fa16dc9"
+    news_api_key: str
     news_query: str = "tesla"
     weather_latitude: float = 55.752116
     weather_longitude: float = 48.744554
