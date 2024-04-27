@@ -32,3 +32,7 @@ scrape_configs:
       - targets: ["backend:8000"]
 
 # Promtail is not configured to scrap metrics by prometheus
+
+  - job_name: grafana
+    static_configs:
+      - targets: [ 'grafana:3000' ]
