@@ -45,6 +45,7 @@ pytest-env = "^0.8.1"
 fakeredis = "^2.5.0"
 httpx = "^0.23.3"
 importlib-metadata = "4.8.3"
+bandit = "1.7.8"
 
 
 [tool.mypy]
@@ -59,6 +60,7 @@ allow_untyped_decorators = true
 warn_unused_ignores = false
 warn_return_any = false
 namespace_packages = true
+bandit = "1.7.8"
 
 # Remove this and add `types-redis`
 # when the issue https://github.com/python/typeshed/issues/8242 is resolved.
