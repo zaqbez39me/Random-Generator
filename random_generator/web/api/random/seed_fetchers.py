@@ -28,7 +28,6 @@ class SeedFetcher(abc.ABC):
         This method should be implemented by subclasses to provide functionality
         for fetching a seed value used in generating random data.
         """
-        pass
 
 
 class WeatherSeedFetcher(SeedFetcher):
@@ -94,8 +93,10 @@ class WeatherSeedFetcher(SeedFetcher):
             An integer representing the encoded seed value.
         """
         base = 32
-        mult = 424223331
-        return round(mult * float(data.current.temperature)) % (2**base)
+        epoch = datetime.utcfromtimestamp(0)
+        return round(
+            float(data.current.temperature) * (datetime.now() - epoch).total_seconds()
+        ) % (2**base)
 
     @classmethod
     def get_seed(cls) -> int:
@@ -255,13 +256,13 @@ class NewsSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
+        base = 16
         if data.articles:
             encoded_seed = hash(data.articles[0].title)
         else:
-            encoded_seed = int(random.random())
-
-        base = 16
-        return encoded_seed % (2**base)
+            encoded_seed = random.randint(1, 2**base)
+        epoch = datetime.utcfromtimestamp(0)
+        return (encoded_seed * (datetime.now() - epoch).total_seconds()) % (2**base)
 
     @classmethod
     def get_seed(cls) -> int:
@@ -312,5 +313,5 @@ class RandomSource(Enum):
         :returns:
             A random float value between 0 and 1.
         """
-        rand = random.Random(x=random.random() + self.fetcher.get_seed())
+        rand = random.Random(x=self.fetcher.get_seed())
         return rand.random()
