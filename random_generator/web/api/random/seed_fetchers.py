@@ -95,7 +95,7 @@ class WeatherSeedFetcher(SeedFetcher):
         base = 32
         epoch = datetime.utcfromtimestamp(0)
         return round(
-            float(data.current.temperature) * (datetime.now() - epoch).total_seconds()
+            float(data.current.temperature) * (datetime.now() - epoch).total_seconds(),
         ) % (2**base)
 
     @classmethod

@@ -56,7 +56,7 @@ def test_encode_data() -> None:
     current_temperature = 25.0
     weather_data = WeatherSeedFetcher.WeatherAPIResponseModel(
         current=WeatherSeedFetcher.WeatherAPIResponseModel.CurrentModel(
-            temperature_2m=25.0,
+            temperature_2m=current_temperature,
         ),
     )
     datetime_now = datetime.datetime.now()
@@ -66,7 +66,7 @@ def test_encode_data() -> None:
     base = 32
     epoch = datetime.datetime.utcfromtimestamp(0)
     expected_seed = round(
-        float(current_temperature) * (datetime_now - epoch).total_seconds()
+        float(current_temperature) * (datetime_now - epoch).total_seconds(),
     ) % (2**base)
     assert seed == expected_seed
 
