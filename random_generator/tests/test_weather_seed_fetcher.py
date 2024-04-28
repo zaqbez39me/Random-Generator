@@ -1,3 +1,4 @@
+import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -52,13 +53,22 @@ def test_encode_data() -> None:
     to encode the weather data into a seed value. The resulting seed is compared
     with the expected seed value.
     """
+    current_temperature = 25.0
     weather_data = WeatherSeedFetcher.WeatherAPIResponseModel(
         current=WeatherSeedFetcher.WeatherAPIResponseModel.CurrentModel(
             temperature_2m=25.0,
         ),
     )
-    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(weather_data)  # type: ignore[attr-defined]
-    assert seed == 2015648683
+    datetime_now = datetime.datetime.now()
+    with patch("datetime.datetime") as mock_datetime:
+        mock_datetime.now.return_value = datetime_now
+        seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(weather_data)  # type: ignore[attr-defined]
+    base = 32
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    expected_seed = round(
+        float(current_temperature) * (datetime_now - epoch).total_seconds()
+    ) % (2**base)
+    assert seed == expected_seed
 
 
 @patch(
