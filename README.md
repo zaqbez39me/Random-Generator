@@ -28,16 +28,19 @@ You can start the project with docker using this command:
 docker-compose -f deploy/docker-compose.yml --project-directory . up --build
 ```
 
-If you want to develop in docker with autoreload add `-f deploy/docker-compose.dev.yml` to your docker command.
+If you want to develop in docker with autoreload add `-f deploy/docker-compose.dev.yml`
+to your docker command.
 Like this:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --project-directory . up --build
 ```
 
-This command exposes the web application on port 8000, mounts current directory and enables autoreload.
+This command exposes the web application on port 8000, mounts current directory and
+enables autoreload.
 
-But you have to rebuild image every time you modify `poetry.lock` or `pyproject.toml` with this command:
+But you have to rebuild image every time you modify `poetry.lock` or `pyproject.toml`
+with this command:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml --project-directory . build
@@ -75,21 +78,25 @@ All environment variables should start with "RANDOM_GENERATOR_" prefix.
 
 For example if you see in your "random_generator/settings.py" a variable named like
 `random_parameter`, you should provide the "RANDOM_GENERATOR_RANDOM_PARAMETER"
-variable to configure the value. This behaviour can be changed by overriding `env_prefix` property
+variable to configure the value. This behaviour can be changed by
+overriding `env_prefix` property
 in `random_generator.settings.Settings.Config`.
 
 An example of .env file:
+
 ```bash
 RANDOM_GENERATOR_RELOAD="True"
 RANDOM_GENERATOR_PORT="8000"
 RANDOM_GENERATOR_ENVIRONMENT="dev"
 ```
 
-You can read more about BaseSettings class here: https://pydantic-docs.helpmanual.io/usage/settings/
+You can read more about BaseSettings class
+here: https://pydantic-docs.helpmanual.io/usage/settings/
 
 ## Pre-commit
 
 To install pre-commit simply run inside the shell:
+
 ```bash
 pre-commit install
 ```
@@ -98,14 +105,13 @@ pre-commit is very useful to check your code before publishing it.
 It's configured using .pre-commit-config.yaml file.
 
 By default it runs:
+
 * black (formats your code);
 * mypy (validates types);
 * isort (sorts imports in all files);
 * flake8 (spots possible bugs);
 
-
 You can read more about pre-commit here: https://pre-commit.com/
-
 
 ## Running tests
 
@@ -118,8 +124,24 @@ docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --p
 
 For running tests on your local machine.
 
-
 2. Run the pytest.
+
 ```bash
 pytest -vv .
 ```
+
+## Locust performance report
+
+Running 1 user with spawn-rate = 1, for 10 minutes straight, gave following
+results:
+
+```
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      /api/random/news                                                                 388     1(0.26%) |    613     314    2077    500 |    0.65        0.00
+GET      /api/random/time                                                                 447     1(0.00%) |    487     253    2893    380 |    0.75        0.00
+GET      /api/random/weather                                                              411     0(0.00%) |    348     224     689    340 |    0.69        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                      1246     1(0.08%) |    481     224    2893    400 |    2.08        0.00
+```
+There is a small chance to get internal server error due to external API throughput.
