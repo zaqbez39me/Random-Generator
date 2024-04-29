@@ -1,13 +1,12 @@
-# random_generator
-
+# Random generator
+___
 This project was generated using fastapi_template.
 
 ## Poetry
+____
+This project uses Poetry, a modern dependency management tool.
 
-This project uses poetry. It's a modern dependency management
-tool.
-
-To run the project use this set of commands:
+To run the project, use the following commands:
 
 ```bash
 poetry install
@@ -16,73 +15,65 @@ poetry run python -m random_generator
 
 This will start the server on the configured host.
 
-You can find swagger documentation at `/api/docs`.
+Swagger documentation is available at `/api/docs`.
 
-You can read more about poetry here: https://python-poetry.org/
+Learn more about Poetry [here](https://python-poetry.org/).
 
 ## Docker
 
-You can start the project with docker using this command:
+You can start the project with Docker using this command:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml --project-directory . up --build
 ```
 
-If you want to develop in docker with autoreload add `-f deploy/docker-compose.dev.yml`
-to your docker command.
-Like this:
+For development in Docker with auto-reload, add `-f deploy/docker-compose.dev.yml` to your Docker command, like this:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --project-directory . up --build
 ```
 
-This command exposes the web application on port 8000, mounts current directory and
-enables autoreload.
+This command exposes the web application on port 8000, mounts the current directory, and enables auto-reload.
 
-But you have to rebuild image every time you modify `poetry.lock` or `pyproject.toml`
-with this command:
+However, you have to rebuild the image every time you modify `poetry.lock` or `pyproject.toml` with this command:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml --project-directory . build
 ```
 
-## Project structure
+## Project Structure
 
 ```bash
 $ tree "random_generator"
 random_generator
-├── conftest.py  # Fixtures for all tests.
-├── db  # module contains db configurations
-│   ├── dao  # Data Access Objects. Contains different classes to interact with database.
-│   └── models  # Package contains different models for ORMs.
-├── __main__.py  # Startup script. Starts uvicorn.
-├── services  # Package for different external services such as rabbit or redis etc.
-├── settings.py  # Main configuration settings for project.
-├── static  # Static content.
-├── tests  # Tests for project.
-└── web  # Package contains web server. Handlers, startup config.
-    ├── api  # Package with all handlers.
-    │   └── router.py  # Main router.
-    ├── application.py  # FastAPI application configuration.
-    └── lifetime.py  # Contains actions to perform on startup and shutdown.
+├── conftest.py             # Fixtures for all tests.
+├── db                      # Module contains DB configurations.
+│   ├── dao                 # Data Access Objects. Contains different classes to interact with the database.
+│   └── models              # Package contains different models for ORMs.
+├── __main__.py             # Startup script. Starts Uvicorn.
+├── services                # Package for different external services such as RabbitMQ or Redis, etc.
+├── settings.py             # Main configuration settings for the project.
+├── static                  # Static content.
+├── tests                   # Tests for the project.
+└── web                     # Package contains the web server: handlers, startup config.
+    ├── api                 # Package with all handlers.
+    │   └── router.py       # Main router.
+    ├── application.py      # FastAPI application configuration.
+    └── lifetime.py         # Contains actions to perform on startup and shutdown.
 ```
 
 ## Configuration
+___
 
 This application can be configured with environment variables.
 
-You can create `.env` file in the root directory and place all
-environment variables here.
+Create a `.env` file in the root directory and place all environment variables here.
 
-All environment variables should start with "RANDOM_GENERATOR_" prefix.
+All environment variables should start with the "RANDOM_GENERATOR_" prefix.
 
-For example if you see in your "random_generator/settings.py" a variable named like
-`random_parameter`, you should provide the "RANDOM_GENERATOR_RANDOM_PARAMETER"
-variable to configure the value. This behaviour can be changed by
-overriding `env_prefix` property
-in `random_generator.settings.Settings.Config`.
+For example, if you see in your `random_generator/settings.py` a variable named like `random_parameter`, you should provide the "RANDOM_GENERATOR_RANDOM_PARAMETER" variable to configure the value. This behavior can be changed by overriding the `env_prefix` property in `random_generator.settings.Settings.Config`.
 
-An example of .env file:
+An example of a `.env` file:
 
 ```bash
 RANDOM_GENERATOR_RELOAD="True"
@@ -90,58 +81,62 @@ RANDOM_GENERATOR_PORT="8000"
 RANDOM_GENERATOR_ENVIRONMENT="dev"
 ```
 
-You can read more about BaseSettings class
-here: https://pydantic-docs.helpmanual.io/usage/settings/
+Learn more about the `BaseSettings` class [here](https://pydantic-docs.helpmanual.io/usage/settings/).
 
 ## Pre-commit
-
-To install pre-commit simply run inside the shell:
+___
+To install Pre-commit, simply run inside the shell:
 
 ```bash
 pre-commit install
 ```
 
-pre-commit is very useful to check your code before publishing it.
-It's configured using .pre-commit-config.yaml file.
+Pre-commit is very useful to check your code before publishing it. It's configured using `.pre-commit-config.yaml` file.
 
-By default it runs:
+By default, it runs:
 
-* black (formats your code);
-* mypy (validates types);
-* isort (sorts imports in all files);
-* flake8 (spots possible bugs);
+- Black (formats your code).
+- Mypy (validates types).
+- Isort (sorts imports in all files).
+- Flake8 (spots possible bugs).
 
-You can read more about pre-commit here: https://pre-commit.com/
+Learn more about Pre-commit [here](https://pre-commit.com/).
 
-## Running tests
-
-If you want to run it in docker, simply run:
+## Running Tests
+___
+To run tests in Docker, simply run:
 
 ```bash
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --project-directory . run --build --rm api pytest -vv .
 docker-compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml --project-directory . down
 ```
 
-For running tests on your local machine.
+For running tests on your local machine:
 
-2. Run the pytest.
+1. Install the dependencies.
+
+```bash
+poetry install --no-root
+```
+
+2. Run pytest.
 
 ```bash
 pytest -vv .
 ```
 
-## Locust performance report
-
-Running 1 user with spawn-rate = 1, for 10 minutes straight, gave following
-results:
+## Locust Performance Report
+___
+Running 1 user with spawn-rate = 1, for 10 minutes straight, gave the following results:
 
 ```
-Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
---------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
-GET      /api/random/news                                                                 388     1(0.26%) |    613     314    2077    500 |    0.65        0.00
-GET      /api/random/time                                                                 447     1(0.00%) |    487     253    2893    380 |    0.75        0.00
-GET      /api/random/weather                                                              411     0(0.00%) |    348     224     689    340 |    0.69        0.00
---------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
-         Aggregated                                                                      1246     1(0.08%) |    481     224    2893    400 |    2.08        0.00
+Type     Name                # Reqs   # Fails  |  Avg    Min    Max    Med  |  Req/s  Fails/s
+--------|-------------------|-------|----------|-------|-------|-------|-------|--------|---------
+GET      /api/random/news   388     1(0.26%) |  613   314    2077   500   |  0.65    0.00
+GET      /api/random/time   447     1(0.00%) |  487   253    2893   380   |  0.75    0.00
+GET      /api/random/weather411     0(0.00%) |  348   224    689    340   |  0.69    0.00
+--------|-------------------|-------|----------|-------|-------|-------|-------|--------|---------
+         Aggregated         1246    1(0.08%) |  481   224    2893   400   |  2.08    0.00
 ```
-There is a small chance to get internal server error due to external API throughput.
+
+There is a small chance to get an internal server error due to external API throughput.
