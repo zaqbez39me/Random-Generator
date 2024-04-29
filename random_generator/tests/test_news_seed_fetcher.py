@@ -72,11 +72,11 @@ def test_encode_data(mock_fetch_data: MagicMock) -> None:
         ],
     )
     seed = NewsSeedFetcher.get_seed()
-    mod_num = 1_000_000_007
+    mod_num = 1000000007
     epoch = datetime.datetime.utcfromtimestamp(0)
     encoded_seed = hash("Sample Article Title")
     expected_seed = (
-        encoded_seed * int((datetime.datetime.now() - epoch).total_seconds() * 1_000)
+        encoded_seed * int((datetime.datetime.now() - epoch).total_seconds() * 1000)
     ) % mod_num
     assert seed == expected_seed
 
