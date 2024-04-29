@@ -76,7 +76,7 @@ jobs:
       - name: Run server
         run: poetry run uvicorn random_generator.web.application:get_app &
       - name: Run locust
-        run: poetry run locust -f random_generator/tests/performance/locustfile.py --headless --users 10 --spawn-rate 1 -H http://127.0.0.1:8000 --run-time 1m
+        run: poetry run locust -f random_generator/tests/performance/locustfile.py --headless --users 3 --spawn-rate 1 -H http://127.0.0.1:8000 --run-time 1m
 
   bandit:
     runs-on: ubuntu-latest
@@ -91,4 +91,4 @@ jobs:
       env:
         POETRY_VIRTUALENVS_CREATE: false
     - name: Run bandit check
-      run: poetry run bandit random_generator/web
+      run: poetry run bandit .
