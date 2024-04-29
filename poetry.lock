@@ -964,6 +964,20 @@ Flask = ">=1.0.4"
 Werkzeug = ">=1.0.1"
 
 [[package]]
+name = "freezegun"
+version = "1.5.0"
+description = "Let your Python tests travel through time"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "freezegun-1.5.0-py3-none-any.whl", hash = "sha256:ec3f4ba030e34eb6cf7e1e257308aee2c60c3d038ff35996d7475760c9ff3719"},
+    {file = "freezegun-1.5.0.tar.gz", hash = "sha256:200a64359b363aa3653d8aac289584078386c7c3da77339d257e46a01fb5c77c"},
+]
+
+[package.dependencies]
+python-dateutil = ">=2.7"
+
+[[package]]
 name = "gevent"
 version = "24.2.1"
 description = "Coroutine-based network library"
@@ -4039,4 +4053,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ad1f690d01a0faa4d3eacf4b517cd1a2a6daf3f9c761e13da1f764aa7c5af0b7"
+content-hash = "7c5343b13e71cdc1309631533e22576ee4950d3ac6873eb315a96e315907f743"

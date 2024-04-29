@@ -1,7 +1,7 @@
-import datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
+from freezegun import freeze_time
 
 from random_generator.web.api.random.seed_fetchers import WeatherSeedFetcher
 
@@ -44,6 +44,7 @@ def test_fetch_data(mock_get: MagicMock, mock_response: MagicMock) -> None:
     assert data.current.temperature == 25
 
 
+@freeze_time("2024-04-29 11:46:10")
 def test_encode_data() -> None:
     """
     Test the encoding of weather data into a seed value.
@@ -53,22 +54,15 @@ def test_encode_data() -> None:
     to encode the weather data into a seed value. The resulting seed is compared
     with the expected seed value.
     """
-    current_temperature = 25.0
     weather_data = WeatherSeedFetcher.WeatherAPIResponseModel(
         current=WeatherSeedFetcher.WeatherAPIResponseModel.CurrentModel(
-            temperature_2m=current_temperature,
+            temperature_2m=25.0,
         ),
     )
-    datetime_now = datetime.datetime.now()
-    with patch("datetime.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime_now
-        seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(weather_data)  # type: ignore[attr-defined]
-    base = 32
-    epoch = datetime.datetime.utcfromtimestamp(0)
-    expected_seed = round(
-        float(current_temperature) * (datetime_now - epoch).total_seconds(),
-    ) % (2**base)
-    assert seed == expected_seed
+    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(
+        weather_data
+    )  # type: ignore[attr-defined]
+    assert seed == 859778956
 
 
 @patch(

@@ -1,6 +1,7 @@
 import datetime
 from unittest.mock import MagicMock, patch
 
+from freezegun import freeze_time
 from pytest import fixture
 
 from random_generator.web.api.random.seed_fetchers import NewsSeedFetcher
@@ -44,8 +45,12 @@ def test_fetch_data(mock_get: MagicMock, mock_response: MagicMock) -> None:
     assert data.articles[0].title == "Sample Article Title"
 
 
-@patch("random_generator.web.api.random.seed_fetchers.NewsSeedFetcher")
-def test_encode_data(mock_fetcher: MagicMock) -> None:
+@patch(
+    "random_generator.web.api.random.seed_fetchers.NewsSeedFetcher._NewsSeedFetcher"
+    "__fetch_data",
+)
+@freeze_time("2024-04-29 11:46:10")
+def test_encode_data(mock_fetch_data: MagicMock) -> None:
     """
     Test the encoding of news data into a seed value.
 
@@ -54,30 +59,25 @@ def test_encode_data(mock_fetcher: MagicMock) -> None:
     resulting seed is compared with the expected seed value calculated based
     on the mocked api return value.
 
-    :param mock_fetcher:
-        A MagicMock object representing the mocked fetcher.
+    :param mock_fetch_data:
+        A MagicMock object representing the mocked fetcher fetch data method.
     """
-    datetime_now = datetime.datetime.now()
     # Set the return value of mock_fetcher.__fetch_data to a
     # fixed value for consistent testing
-    mock_fetcher.__fetch_data.return_value = NewsSeedFetcher.NewsAPIResponseModel(
+    mock_fetch_data.return_value = NewsSeedFetcher.NewsAPIResponseModel(
         articles=[
             NewsSeedFetcher.NewsAPIResponseModel.ArticleModel(
                 title="Sample Article Title",
             ),
         ],
     )
-    with patch("datetime.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime_now
-        seed = NewsSeedFetcher.get_seed()
-
-    expected_seed = hash("Sample Article Title")
-    base = 16
+    seed = NewsSeedFetcher.get_seed()
+    mod_num = 1_000_000_007
     epoch = datetime.datetime.utcfromtimestamp(0)
-    expected_seed = (expected_seed * (datetime_now - epoch).total_seconds()) % (
-        2**base
-    )
-
+    encoded_seed = hash("Sample Article Title")
+    expected_seed = (
+        encoded_seed * int((datetime.datetime.now() - epoch).total_seconds() * 1_000)
+    ) % mod_num
     assert seed == expected_seed
 
 

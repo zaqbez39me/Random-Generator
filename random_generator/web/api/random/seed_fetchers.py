@@ -92,11 +92,15 @@ class WeatherSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
-        base = 32
+        mod_num = 1_000_000_007
         epoch = datetime.utcfromtimestamp(0)
-        return round(
-            float(data.current.temperature) * (datetime.now() - epoch).total_seconds(),
-        ) % (2**base)
+        return (
+            round(
+                float(data.current.temperature)
+                * (datetime.now() - epoch).total_seconds(),
+            )
+            % mod_num
+        )
 
     @classmethod
     def get_seed(cls) -> int:
@@ -172,9 +176,9 @@ class TimeSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
-        base = 16
-        mult = 13134
-        return round(data.dt.timestamp() * mult) % (2**base)
+        mod_num = 1_000_000_007
+        mult = 1_000_000_009
+        return round(data.dt.timestamp() * mult) % mod_num
 
     @classmethod
     def get_seed(cls) -> int:
@@ -256,13 +260,15 @@ class NewsSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
-        base = 16
+        mod_num = 1_000_000_007
         if data.articles:
             encoded_seed = hash(data.articles[0].title)
         else:
-            encoded_seed = random.randint(1, 2**base)
+            encoded_seed = random.randint(1, mod_num)
         epoch = datetime.utcfromtimestamp(0)
-        return (encoded_seed * (datetime.now() - epoch).total_seconds()) % (2**base)
+        return (
+            encoded_seed * int((datetime.now() - epoch).total_seconds() * 1_000)
+        ) % mod_num
 
     @classmethod
     def get_seed(cls) -> int:
