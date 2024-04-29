@@ -1,5 +1,7 @@
+import datetime
 from unittest.mock import MagicMock, patch
 
+from freezegun import freeze_time
 from pytest import fixture
 
 from random_generator.web.api.random.seed_fetchers import NewsSeedFetcher
@@ -43,38 +45,39 @@ def test_fetch_data(mock_get: MagicMock, mock_response: MagicMock) -> None:
     assert data.articles[0].title == "Sample Article Title"
 
 
-@patch("random.random")
-def test_encode_data(mock_random: MagicMock) -> None:
+@patch(
+    "random_generator.web.api.random.seed_fetchers.NewsSeedFetcher._NewsSeedFetcher"
+    "__fetch_data",
+)
+@freeze_time("2024-04-29 11:46:10")
+def test_encode_data(mock_fetch_data: MagicMock) -> None:
     """
     Test the encoding of news data into a seed value.
 
     This function mocks the random. random method to ensure consistent testing.
-    It encodes a sample news data into a seed value using the __encode_data
-    method of NewsSeedFetcher. The resulting seed is compared with the expected
-    seed value calculated based on the mocked random. random value and the sample
-    article title.
+    It gets a seed value using the get_seed method of NewsSeedFetcher. The
+    resulting seed is compared with the expected seed value calculated based
+    on the mocked api return value.
 
-    :param mock_random:
-        A MagicMock object representing the mocked random. random function.
+    :param mock_fetch_data:
+        A MagicMock object representing the mocked fetcher fetch data method.
     """
-    # Set the return value of random.random() to a fixed value for consistent testing
-    mock_random.return_value = 0.123456789
-
-    news_data = NewsSeedFetcher.NewsAPIResponseModel(
+    # Set the return value of mock_fetcher.__fetch_data to a
+    # fixed value for consistent testing
+    mock_fetch_data.return_value = NewsSeedFetcher.NewsAPIResponseModel(
         articles=[
             NewsSeedFetcher.NewsAPIResponseModel.ArticleModel(
                 title="Sample Article Title",
             ),
         ],
     )
-    seed = NewsSeedFetcher._NewsSeedFetcher__encode_data(  # type: ignore[attr-defined]
-        news_data,
-    )
-    if news_data.articles:
-        expected_seed = int(hash("Sample Article Title")) % (2**16)
-    else:
-        expected_seed = int(0.123456789) % (2**16)
-
+    seed = NewsSeedFetcher.get_seed()
+    mod_num = 1000000007
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    encoded_seed = hash("Sample Article Title")
+    expected_seed = (
+        encoded_seed * int((datetime.datetime.now() - epoch).total_seconds() * 1000)
+    ) % mod_num
     assert seed == expected_seed
 
 

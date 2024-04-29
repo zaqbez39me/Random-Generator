@@ -28,7 +28,6 @@ class SeedFetcher(abc.ABC):
         This method should be implemented by subclasses to provide functionality
         for fetching a seed value used in generating random data.
         """
-        pass
 
 
 class WeatherSeedFetcher(SeedFetcher):
@@ -93,9 +92,15 @@ class WeatherSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
-        base = 32
-        mult = 424223331
-        return round(mult * float(data.current.temperature)) % (2**base)
+        mod_num = 1000000007
+        epoch = datetime.utcfromtimestamp(0)
+        return (
+            round(
+                float(data.current.temperature)
+                * (datetime.now() - epoch).total_seconds(),
+            )
+            % mod_num
+        )
 
     @classmethod
     def get_seed(cls) -> int:
@@ -171,9 +176,9 @@ class TimeSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
-        base = 16
-        mult = 13134
-        return round(data.dt.timestamp() * mult) % (2**base)
+        mod_num = 1000000007
+        mult = 1000000009
+        return round(data.dt.timestamp() * mult) % mod_num
 
     @classmethod
     def get_seed(cls) -> int:
@@ -255,13 +260,15 @@ class NewsSeedFetcher(SeedFetcher):
         :returns:
             An integer representing the encoded seed value.
         """
+        mod_num = 1000000007
         if data.articles:
             encoded_seed = hash(data.articles[0].title)
         else:
-            encoded_seed = int(random.random())
-
-        base = 16
-        return encoded_seed % (2**base)
+            encoded_seed = random.randint(1, mod_num)
+        epoch = datetime.utcfromtimestamp(0)
+        return (
+            encoded_seed * int((datetime.now() - epoch).total_seconds() * 1000)
+        ) % mod_num
 
     @classmethod
     def get_seed(cls) -> int:
@@ -312,5 +319,5 @@ class RandomSource(Enum):
         :returns:
             A random float value between 0 and 1.
         """
-        rand = random.Random(x=random.random() + self.fetcher.get_seed())
+        rand = random.Random(x=self.fetcher.get_seed())
         return rand.random()

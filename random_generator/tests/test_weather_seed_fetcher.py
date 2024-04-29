@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
+from freezegun import freeze_time
 
 from random_generator.web.api.random.seed_fetchers import WeatherSeedFetcher
 
@@ -43,6 +44,7 @@ def test_fetch_data(mock_get: MagicMock, mock_response: MagicMock) -> None:
     assert data.current.temperature == 25
 
 
+@freeze_time("2024-04-29 11:46:10")
 def test_encode_data() -> None:
     """
     Test the encoding of weather data into a seed value.
@@ -57,8 +59,10 @@ def test_encode_data() -> None:
             temperature_2m=25.0,
         ),
     )
-    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(weather_data)  # type: ignore[attr-defined]
-    assert seed == 2015648683
+    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(  # type: ignore[attr-defined]
+        weather_data,
+    )
+    assert seed == 859778956
 
 
 @patch(

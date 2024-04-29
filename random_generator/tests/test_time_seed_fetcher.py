@@ -56,7 +56,7 @@ def test_encode_data() -> None:
         dateTime=datetime.fromisoformat("2024-04-22T12:00:00Z"),
     )
     seed = TimeSeedFetcher._TimeSeedFetcher__encode_data(time_data)  # type: ignore[attr-defined]
-    assert seed == 33152
+    assert seed == 427574315
 
 
 @patch(
