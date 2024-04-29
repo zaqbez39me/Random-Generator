@@ -59,9 +59,9 @@ def test_encode_data() -> None:
             temperature_2m=25.0,
         ),
     )
-    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(
+    seed = WeatherSeedFetcher._WeatherSeedFetcher__encode_data(  # type: ignore[attr-defined]
         weather_data,
-    )  # type: ignore[attr-defined]
+    )
     assert seed == 859778956
 
 
