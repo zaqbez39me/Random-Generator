@@ -91,4 +91,4 @@ jobs:
       env:
         POETRY_VIRTUALENVS_CREATE: false
     - name: Run bandit check
-      run: poetry run bandit random_generator/web
+      run: poetry run bandit .
