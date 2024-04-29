@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -110,13 +111,13 @@
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "ping",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Panel Title",
+      "title": "Healthcheck",
       "type": "timeseries"
     }
   ],
@@ -133,6 +134,6 @@
   "timezone": "browser",
   "title": "Pings",
   "uid": "adjxfydtb277kb",
-  "version": 1,
+  "version": 3,
   "weekStart": ""
 }
